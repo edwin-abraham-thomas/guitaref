@@ -13,6 +13,7 @@ import { ThemeService, Theme } from './theme.service';
 
 @Component({
   selector: 'app-root',
+  standalone: true,
   imports: [
     RouterOutlet, 
     MatSlideToggleModule, 
