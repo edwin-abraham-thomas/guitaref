@@ -1,0 +1,56 @@
+<div class="demo-container">
+  <h1>Fretboard Component Demo</h1>
+  
+  <div class="controls">
+    <button mat-raised-button color="primary" (click)="onShowCIonianScale()" aria-label="Show C Ionian scale">
+      Show C Ionian Scale
+    </button>
+    <button mat-raised-button color="accent" (click)="onShowCMajorChord()" aria-label="Show C major chord notes">
+      Show C Major Chord
+    </button>
+    <button mat-raised-button color="warn" (click)="onShowDropDTuning()" aria-label="Show Drop D tuning">
+      Show Drop D Tuning
+    </button>
+    <button mat-raised-button (click)="onShowStandardTuning()" aria-label="Show standard tuning">
+      Show Standard Tuning
+    </button>
+  </div>
+
+  <div class="fretboard-display">
+    @if (isLoading) {
+      <div class="loading" aria-label="Loading fretboard">
+        <mat-spinner diameter="40"></mat-spinner>
+        <p>Loading fretboard data...</p>
+      </div>
+    }
+    
+    @if (error) {
+      <div class="error" aria-label="Error message">
+        <mat-icon color="warn">error</mat-icon>
+        <p>{{ error }}</p>
+      </div>
+    }
+    
+    @if (fretboardData && !isLoading) {
+      <app-fretboard 
+        [data]="fretboardData"
+        [maxFrets]="12"
+        [showFretMarkers]="true"
+        aria-label="Interactive guitar fretboard">
+      </app-fretboard>
+    }
+  </div>
+
+  <div class="demo-info">
+    <h2>Features Demonstrated:</h2>
+    <ul>
+      <li>Renders 6 strings (EADGBE) with 12 frets by default</li>
+      <li>Color-coded notes (root notes in red, scale notes in blue)</li>
+      <li>Fret markers at standard positions (3, 5, 7, 9, 12)</li>
+      <li>Hover tooltips with note details</li>
+      <li>Support for alternative tunings (Drop D)</li>
+      <li>Responsive design that adapts to container size</li>
+      <li>ARIA labels for accessibility</li>
+    </ul>
+  </div>
+</div>

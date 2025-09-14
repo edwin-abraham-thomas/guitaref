@@ -14,4 +14,5 @@ The app will be built as a single-page application (SPA) using Angular, followin
 > ng generate interface <interface-name>
 > ng generate enum <enum-name>
 
-- Keep different types of files in appropriate folders. /services, /coomponents, /guards, /models, etc
+- Keep different types of files in appropriate folders. /services, /coomponents, /guards, /models, etc.
+- Use standalone components with lazy loading where ever applicable.

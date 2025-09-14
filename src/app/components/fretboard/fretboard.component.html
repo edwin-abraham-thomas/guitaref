@@ -1,0 +1,46 @@
+<div class="fretboard-container" aria-label="Guitar fretboard diagram">
+  <!-- Fret numbers row -->
+  <div class="fret-numbers">
+    <div class="string-name"></div>
+    @for (fret of frets; track fret) {
+      <div class="fret-number" [attr.aria-label]="'Fret ' + fret">
+        {{ fret }}
+      </div>
+    }
+  </div>
+
+  <!-- Strings and frets -->
+  @for (string of strings; track string) {
+    <div class="string-row" [attr.aria-label]="'String ' + string + ' (' + getStringName(string) + ')'">
+      <!-- String name -->
+      <div class="string-name" [attr.aria-label]="'String ' + string + ' name: ' + getStringName(string)">
+        {{ getStringName(string) }}
+      </div>
+
+      <!-- Frets for this string -->
+      @for (fret of frets; track fret) {
+        @let notePosition = getNoteAtPosition(string, fret);
+        <div class="fret-cell"
+             [class.has-note]="!!notePosition"
+             [class.root-note]="notePosition ? notePosition.note.isRoot : false"
+             [class.scale-note]="notePosition ? !notePosition.note.isRoot : false"
+             (click)="onNoteClick(notePosition)"
+             [attr.aria-label]="getAriaLabel(string, fret)">
+          
+          <!-- Note dot -->
+          @if (notePosition) {
+            <div class="note-dot" [class]="getNoteClass(notePosition)">
+              <span class="note-name">{{ notePosition.note.name }}</span>
+            </div>
+          }
+
+          <!-- Fret marker - only show on string 6 (low E) -->
+          @if (string === 6 && shouldShowFretMarker(fret)) {
+            <div class="fret-marker" [class]="getFretMarkerClass(fret)"></div>
+          }
+        </div>
+      }
+    </div>
+  }
+
+</div>

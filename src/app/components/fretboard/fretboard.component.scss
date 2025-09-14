@@ -1,0 +1,412 @@
+.fretboard-container {
+  display: flex;
+  flex-direction: column;
+  font-family: 'Arial', sans-serif;
+  background: var(--mat-app-background-color, #f8f9fa);
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  min-width: auto; /* Allow container to expand beyond 300px */
+  width: 100%; /* Take full available width */
+  overflow-x: auto;
+  transition: background-color 0.3s ease;
+}
+
+/* Ensure box-sizing includes padding and border for all elements */
+.fretboard-container * {
+  box-sizing: border-box;
+}
+
+.fret-numbers {
+  display: flex;
+  margin-bottom: 4px;
+  // Use exact same structure as string rows
+}
+
+.fret-numbers .string-name {
+  flex: 0 0 60px; // Match string name width exactly
+  visibility: hidden;
+}
+
+.fret-number {
+  flex: 1 1 0%; /* grow and shrink equally with basis 0% for equal distribution */
+  text-align: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--mat-app-text-color, #212529);
+  min-width: 40px; // Minimum width matches fret cells
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: 2px solid transparent;
+  box-sizing: border-box;
+  // Ensure proper spacing between fret numbers
+  padding: 0 2px;
+  transition: color 0.3s ease;
+}
+
+// Ensure fret numbers and cells expand to fill available space
+.fretboard-container {
+  width: 100%; // Take full available width
+  min-width: auto; // Allow to shrink below 300px if needed
+}
+
+.fret-numbers,
+.string-row {
+  width: 100%; // Ensure full width
+}
+
+.fret-markers-row {
+  display: flex;
+  margin-bottom: 8px;
+  margin-left: 60px; // Match string name width
+  height: 20px;
+  align-items: center;
+}
+
+.fret-marker-spacer {
+  width: 60px; // Match string name width
+  flex-shrink: 0;
+}
+
+.fret-marker-cell {
+  flex: 1;
+  min-width: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.string-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 4px;
+  position: relative;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    left: 60px;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, 
+      transparent 0%, 
+      var(--mat-app-divider-color, #dee2e6) 2%, 
+      var(--mat-app-divider-color, #dee2e6) 98%, 
+      transparent 100%
+    );
+    z-index: 1;
+  }
+}
+
+.string-name {
+  flex: 0 0 60px; /* Use flex instead of fixed width for consistent sizing */
+  text-align: center;
+  font-weight: bold;
+  font-size: 14px;
+  color: var(--mat-app-text-color, #212529);
+  background: transparent;
+  padding: 8px 4px;
+  z-index: 2;
+  box-sizing: border-box;
+  transition: color 0.3s ease;
+}
+
+.fret-cell {
+  flex: 1 1 0%; /* grow and shrink equally with basis 0% to fill space */
+  min-width: 40px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  border-right: 2px solid var(--mat-app-divider-color, #adb5bd);
+  background: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+  
+  &:last-child {
+    border-right: none;
+  }
+  
+  &:hover {
+    background-color: #e9ecef;
+  }
+  
+  &.has-note {
+    background-color: #f8f9fa;
+  }
+  
+  &.root-note {
+    background-color: #fff5f5;
+    
+    .note-dot {
+      background-color: #dc3545;
+      border-color: #c82333;
+      
+      .note-name {
+        color: #fff;
+        font-weight: bold;
+      }
+    }
+  }
+  
+  &.scale-note {
+    background-color: #f0f8ff;
+    
+    .note-dot {
+      background-color: #007bff;
+      border-color: #0056b3;
+      
+      .note-name {
+        color: #fff;
+      }
+    }
+  }
+}
+
+.note-dot {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid;
+  z-index: 3;
+  transition: transform 0.2s ease;
+  
+  &:hover {
+    transform: scale(1.1);
+  }
+}
+
+.note-name {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.fret-marker {
+  // Styles for markers in the dedicated markers row
+  &.single-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--mat-app-secondary-text-color, #6c757d);
+    transition: background-color 0.3s ease;
+  }
+  
+  &.double-dot {
+    display: flex;
+    gap: 4px;
+    
+    &::before,
+    &::after {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background-color: var(--mat-app-secondary-text-color, #6c757d);
+      transition: background-color 0.3s ease;
+    }
+  }
+}
+
+// Fret marker positioning in fret cells
+.fret-cell .fret-marker {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+}
+
+// Remove unused marker row styles
+.fret-markers-row,
+.fret-marker-spacer,
+.fret-marker-cell {
+  display: none;
+}
+
+
+// Responsive design
+@media (max-width: 768px) {
+  .fretboard-container {
+    padding: 8px;
+  }
+  
+  .fret-number {
+    min-width: 30px;
+    font-size: 11px;
+  }
+  
+  .string-name {
+    width: 50px;
+    font-size: 12px;
+    padding: 6px 3px;
+  }
+  
+  .fret-cell {
+    min-width: 30px;
+    height: 40px;
+  }
+  
+  .note-dot {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .note-name {
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .fret-number {
+    min-width: 25px;
+    font-size: 10px;
+  }
+  
+  .string-name {
+    width: 40px;
+    font-size: 11px;
+    padding: 4px 2px;
+  }
+  
+  .fret-cell {
+    min-width: 25px;
+    height: 35px;
+  }
+  
+  .note-dot {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .note-name {
+    font-size: 9px;
+  }
+}
+
+// High contrast mode support
+@media (prefers-contrast: high) {
+  .fret-cell {
+    border-right-color: #000;
+    
+    &.root-note {
+      background-color: #ffcccc;
+    }
+    
+    &.scale-note {
+      background-color: #cce5ff;
+    }
+  }
+  
+  .note-dot {
+    border-width: 3px;
+  }
+  
+  .fret-marker {
+    &.single-dot,
+    &.double-dot::before,
+    &.double-dot::after {
+      background-color: #000;
+    }
+  }
+}
+
+// Reduced motion support
+@media (prefers-reduced-motion: reduce) {
+  .note-dot {
+    transition: none;
+    
+    &:hover {
+      transform: none;
+    }
+  }
+  
+  .fret-cell {
+    transition: none;
+  }
+}
+
+// Focus styles for accessibility
+.fret-cell:focus-visible {
+  outline: 2px solid #007bff;
+  outline-offset: 2px;
+  z-index: 4;
+}
+
+// Print styles
+@media print {
+  .fretboard-container {
+    box-shadow: none;
+    background: #fff;
+  }
+  
+  .fret-cell {
+    border-right-color: #000;
+    background: #fff !important;
+  }
+  
+  .note-dot {
+    background-color: #000 !important;
+    border-color: #000 !important;
+    
+    .note-name {
+      color: #fff !important;
+    }
+  }
+}
+
+// Dark theme overrides
+.dark-theme {
+  .fret-number {
+    color: #e9ecef; // Light color for dark theme
+  }
+
+  .string-name {
+    color: #e9ecef; // Light text for dark theme
+  }
+
+  .fret-cell {
+    background: #2d2d2d !important; // Dark background for fret cells
+    border-right-color: #495057; // Darker border for frets
+
+    &:hover {
+      background-color: #3d3d3d !important; // Slightly lighter on hover
+    }
+
+    &.has-note {
+      background-color: #343a40 !important; // Darker background for notes
+    }
+
+    &.root-note {
+      background-color: #58252c !important; // Dark red background for root notes
+      
+      .note-dot {
+        background-color: #dc3545; // Keep root note color
+        border-color: #c82333;
+      }
+    }
+
+    &.scale-note {
+      background-color: #1c3b5a !important; // Dark blue background for scale notes
+      
+      .note-dot {
+        background-color: #007bff; // Keep scale note color
+        border-color: #0056b3;
+      }
+    }
+  }
+
+  .fret-marker {
+    &.single-dot,
+    &.double-dot::before,
+    &.double-dot::after {
+      background-color: #adb5bd; // Lighter fret markers for dark theme
+    }
+  }
+}
